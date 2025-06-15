@@ -30,22 +30,33 @@ const updateReapy = () => {
 updateReapy();
 
 const translate = async () => {
-  const sourceLanguage = document.getElementById("source-language");
-  const targetLanguage = document.getElementById("target-language");
-  const inputValue = document.getElementById("orginalLang");
+  try {
+    const sourceLanguage = document.getElementById("source-language").value;
+    const targetLanguage = document.getElementById("target-language").value;
+    const inputValue = document.getElementById("orginalLang").value;
+    const response = await fetch(
+      "https://translate.argosopentech.com/translate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          q: inputValue,
+          source: sourceLanguage,
+          target: targetLanguage,
+          format: "text",
+        }),
+      }
+    );
 
-  const translateWord = await fetch("https://libretranslate.com/translate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      q: "Hello, how are you?",
-      source: "en",
-      target: "uz",
-      format: "text",
-    }),
-  });
-  console.log(translateWord);
+    const data = await response.json();
+    document.getElementById("translate-lang").innerText = data.translatedText;
+  } catch (error) {
+    console.error("Tarjima qilinmadi:", error.message);
+    document.getElementById("translate-lang").innerText =
+      "Tarjima muvaffaqiyatsiz.";
+  }
 };
-document.getElementById("reaply").addEventListener("click", () => translate());
+
+document.getElementById("reaply").addEventListener("click", translate);
