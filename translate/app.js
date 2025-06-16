@@ -35,23 +35,11 @@ const translate = async () => {
     const targetLanguage = document.getElementById("target-language").value;
     const inputValue = document.getElementById("orginalLang").value;
     const response = await fetch(
-      "https://translate.argosopentech.com/translate",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          q: inputValue,
-          source: sourceLanguage,
-          target: targetLanguage,
-          format: "text",
-        }),
-      }
+      `https://api.mymemory.translated.net/get?q=${inputValue}&langpair=${sourceLanguage}|${targetLanguage}`
     );
 
     const data = await response.json();
-    document.getElementById("translate-lang").innerText = data.translatedText;
+    document.getElementById("translate-lang").innerText = data.responseData.translatedText;
   } catch (error) {
     console.error("Tarjima qilinmadi:", error.message);
     document.getElementById("translate-lang").innerText =
